@@ -1,6 +1,6 @@
 WITH joined AS (
     SELECT
-        COALESCE(p.Player, a.Player, s.Player) AS Player,
+        COALESCE(p.Player, s.Player) AS Player,
 
         -- Keep MP only from per_game
         p.MP AS MP,
@@ -38,38 +38,6 @@ WITH joined AS (
         p.Awards AS Awards_pg,
 
         ----------------------------------------------------
-        -- Advanced stats (Advanced_stats) — MP removed
-        ----------------------------------------------------
-        a.Age AS Age_adv,
-        a.Team AS Team_adv,
-        a.Pos AS Pos_adv,
-        a.G AS G_adv,
-        a.GS AS GS_adv,
-        a.FG AS FG_adv,
-        a.FGA AS FGA_adv,
-        a.FG1 AS FGpct_adv,
-        a._3P AS ThreeP_adv,
-        a._3PA AS ThreePA_adv,
-        a._3P1 AS ThreePpct_adv,
-        a._2P AS TwoP_adv,
-        a._2PA AS TwoPA_adv,
-        a._2P1 AS TwoPpct_adv,
-        a.eFG AS eFGpct_adv,
-        a.FT AS FT_adv,
-        a.FTA AS FTA_adv,
-        a.FT1 AS FTpct_adv,
-        a.ORB AS ORB_adv,
-        a.DRB AS DRB_adv,
-        a.TRB AS TRB_adv,
-        a.AST AS AST_adv,
-        a.STL AS STL_adv,
-        a.BLK AS BLK_adv,
-        a.TOV AS TOV_adv,
-        a.PF AS PF_adv,
-        a.PTS AS PTS_adv,
-        a.Awards AS Awards_adv,
-
-        ----------------------------------------------------
         -- Salary data (Salary_data)
         ----------------------------------------------------
         s.Tm AS Team_salary,
@@ -82,16 +50,13 @@ WITH joined AS (
         s.Guaranteed
 
     FROM dbo.Per_game_player_data p
-    FULL OUTER JOIN dbo.Advanced_stats a
-        ON p.Player = a.Player
     FULL OUTER JOIN dbo.Salary_data s
-        ON p.Player = s.Player OR a.Player = s.Player
+        ON p.Player = s.Player
 )
 
 SELECT *
 FROM joined
 WHERE Player IS NOT NULL
   AND Team_pg IS NOT NULL
-  AND Team_adv IS NOT NULL
   AND Team_salary IS NOT NULL;
 
