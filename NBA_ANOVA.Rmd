@@ -1,0 +1,32 @@
+---
+title: "ANOVA Model for NBA Salary"
+author: "Mukund Vegunta"
+date: "2026-05-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readr)
+dataset <- read_csv("C:/Users/mukun/OneDrive - University of Illinois - Urbana/NBA Datasets/cleaned_dataset.csv")
+```
+
+#ANOVA to See if There is a Statistically Signifcant Difference in Salary Among Positions
+```{r}
+y <- dataset[["salary_2025_26"]]
+x <- factor(dataset[["Pos_pg"]])
+anova_model <- aov(y ~ x, data = dataset)
+summary(anova_model)
+
+```
+```{r}
+model.tables(anova_model, type = "means")
+```
+At a 5% signficance level, there is not enough evidence to prove that there is a difference between player salaries depending on the position they play. However, a p-value of 0.0581 is still very low and with a higher signifiance level, there is evidence to suggest a potential difference in NBA player salary by position. Typically, point guards have the highest salary of 15409581, while shooting guards have the lowest salary of 9943616. 
+
+
+
